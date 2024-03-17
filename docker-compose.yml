@@ -1,0 +1,48 @@
+version: "3.1"
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+  auth:
+    build:
+      context: ./auth
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      MONGO_URI: mongodb+srv://youapp:1q2w3e4r5t@youapp.biydlsm.mongodb.net/youappai-auth?retryWrites=true&w=majority&appName=YouApp
+
+  profile:
+    build:
+      context: ./profile
+    restart: always
+    ports:
+      - 3001:3001
+    environment:
+      MONGO_URI: mongodb+srv://youapp:1q2w3e4r5t@youapp.biydlsm.mongodb.net/youappai-profile?retryWrites=true&w=majority&appName=YouApp
+
+  chat:
+    build:
+      context: ./chat
+    restart: always
+    ports:
+      - 3002:3002
+    environment:
+      MONGO_URI: mongodb+srv://youapp:1q2w3e4r5t@youapp.biydlsm.mongodb.net/youappai-chat?retryWrites=true&w=majority&appName=YouApp
